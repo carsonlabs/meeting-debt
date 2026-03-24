@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@theme {
+  --color-receipt: #faf6f0;
+  --color-receipt-text: #1a1a1a;
+  --color-receipt-muted: #666666;
+  --color-receipt-line: #cccccc;
+  --color-burn: #dc2626;
+  --color-burn-light: #fef2f2;
+  --font-mono: "Courier New", Courier, monospace;
+}
