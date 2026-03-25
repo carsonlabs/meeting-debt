@@ -26,6 +26,24 @@ export function Receipt({
 }) {
   const receiptRef = useRef<HTMLDivElement>(null);
 
+  function handleShareTwitter() {
+    const cost = `$${Math.round(receipt.totalCost).toLocaleString()}`;
+    const bestItem = receipt.snarkyLineItems
+      .slice(1) // skip the base cost line
+      .sort((a, b) => parseFloat(b.amount.slice(1)) - parseFloat(a.amount.slice(1)))[0];
+
+    const tweets = [
+      `My ${receipt.durationMinutes}-minute meeting with ${receipt.attendees} people just cost ${cost}.\n\nMost expensive line item: "${bestItem?.label}"\n\nCalculate yours:`,
+      `${cost} for a ${receipt.durationMinutes}-minute meeting.\n\n"${bestItem?.label}" — ${bestItem?.amount}\n\nThis could have been an email.`,
+      `Today's meeting receipt:\n\n${receipt.attendees} people x ${receipt.durationMinutes} min = ${cost}\n\nVerdict: ${receipt.verdict}\n\nGet your receipt:`,
+    ];
+
+    const tweet = tweets[Math.floor(Math.random() * tweets.length)];
+    const url = "https://meeting-debt.vercel.app";
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}&url=${encodeURIComponent(url)}`;
+    window.open(twitterUrl, "_blank", "noopener,noreferrer");
+  }
+
   function handleCopyText() {
     const lines = [
       `MEETING DEBT RECEIPT`,
@@ -209,10 +227,16 @@ export function Receipt({
           Copy as text
         </button>
         <button
+          onClick={handleShareTwitter}
+          className="flex-1 py-3 bg-[#1d9bf0] hover:bg-[#1a8cd8] text-white font-medium rounded-lg transition-colors cursor-pointer"
+        >
+          Share on X
+        </button>
+        <button
           onClick={onReset}
           className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors cursor-pointer"
         >
-          Calculate another
+          New receipt
         </button>
       </div>
     </div>
